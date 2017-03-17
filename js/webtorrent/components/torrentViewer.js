@@ -12,16 +12,27 @@ class TorrentViewer extends React.Component {
   }
 
   render () {
-    const {torrent, torrentId, name, errorMessage, dispatch} = this.props
+    const {
+      name,
+      torrentId,
+      torrent,
+      serverUrl,
+      errorMessage,
+      dispatch
+    } = this.props
 
     const l10nTitle = name
       ? '' // No localization, just use the torrent name
       : torrent
-      ? 'torrentLoadingInfo' // eg 'Loading torrent information...'
-      : 'torrentUntitled' // eg 'Untitled torrent'
-    const l10nStart = name ? 'startPrompt' : 'startPromptUntitled'
+        ? 'torrentLoadingInfo' // eg 'Loading torrent information...'
+        : 'torrentUntitled' // eg 'Untitled torrent'
+
+    const l10nStart = name
+      ? 'startPrompt'
+      : 'startPromptUntitled'
 
     let titleElem, mainButtonId
+
     if (torrent) {
       titleElem = <div className='sectionTitle' data-l10n-id={l10nTitle}>{name}</div>
       mainButtonId = torrent.progress < 1 ? 'downloading' : 'seeding'
@@ -60,9 +71,11 @@ class TorrentViewer extends React.Component {
         <div className='siteDetailsPageContent'>
           <TorrentStatus torrent={torrent} errorMessage={errorMessage} />
           <TorrentFileList
+            torrentId={torrentId}
             torrent={torrent}
+            serverUrl={serverUrl}
             stateOwner={this}
-            torrentId={torrentId} />
+          />
           {legalNotice}
         </div>
       </div>
